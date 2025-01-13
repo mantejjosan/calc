@@ -1,88 +1,69 @@
-# Mini Self-Assigned Project: CLI Calculator
 
-This project is a command-line calculator written in C++. It was inspired by a line in Ray Lischner's book, *Exploring C++*, which reads:
+# CLI Calculator
+
+![calc being used in zsh terminal as demo](images/demo.gif)
+
+
+A command-line calculator built in C++ that handles basic arithmetic operations through terminal arguments. Inspired by a deep dive into C++'s command-line argument handling (`argc` and `argv`), this project demonstrates how to create practical CLI tools while exploring core language concepts.
+
+[Jump to Installation](#installation)
+
+## The Story Behind
+
+It all started with a single line in Ray Lischner's *Exploring C++*:
 
 > "If someone disputes the fact that the `main` function could also be `void`, refer the skeptic to section 3.6.1 of the C++ standard."
 
-This statement piqued my curiosity about the intricacies of the C++ standard and led me to create this simple, yet powerful, calculator program.
+That seemingly innocuous statement sent me tumbling down a rabbit hole of C++ intricacies. As I delved deeper into the Linux ecosystem, watching commands like `pwd`, `ls`, and `grep` dance across my terminal, I began to see the elegant simplicity of command-line tools. Take `grep -i "find this string"` – a command I'd used countless times without truly understanding its inner workings.
 
-## Features
+The magic, I discovered, lay in those mysterious parameters we often see in C++'s main function:
 
-- Handles basic arithmetic operations: addition (`+`), subtraction (`-`), multiplication (`*`), division (`/`), and exponentiation (`^`).
-- Tokenizes input expressions for evaluation.
-- Provides clear error handling for invalid characters and division by zero.
-
-## File Structure
-
-```
-.
-├── calc.cpp      # Source code for the calculator
-└── install-calc.sh # Script to compile and install the calculator
+```cpp
+int main(int argc, char* argv[])
 ```
 
-## Getting Started
+Most newcomers to C++ (myself included) stick to the simpler `int main()`, intimidated by what appears to be cryptic syntax. But behind that intimidating façade lies a powerful concept: command-line arguments.
 
-### Installation
-
-1. Clone this repository or download the files.
-2. Open a terminal in the project directory.
-3. Run the installation script:
-   ```bash
-   ./install-calc.sh
-   ```
-   This will compile `calc.cpp` and make the `calc` binary executable.
-
-   **Note for Windows Users:** If you're using Git Bash or WSL, the script will work as-is. However, you may need to manually add the project directory to your PATH or run the binary directly using `./calc`.
-
-### Usage
-
-Once installed, you can use the calculator directly from your terminal. Pass a mathematical expression as an argument:
+Consider a common compilation command:
 
 ```bash
-calc "3+4*2"
+g++ hello.cpp -o hello
 ```
 
-#### Example Output:
+Each space-separated element here becomes an argument passed to the program:
+- `g++`: The program name itself (argument 0)
+- `hello.cpp`: The input file
+- `-o`: The output flag
+- `hello`: The desired output filename
 
-```bash
-11
-```
+`argc` counts these arguments, while `argv` stores them in an array of strings, opening up a world of possibilities for program interaction. This understanding led me to create this calculator, transforming what seemed like a basic project into an exploration of how command-line tools actually work under the hood.
 
-For Windows users, if you encounter issues running `calc`, try using the full path or adding the directory to your PATH environment variable. Alternatively, run it like this:
+## Installation
 
-```bash
-./calc "3+4*2"
-```
+1. Clone this Git repository:
+    ```bash
+    git clone git@github.com:mantejjosan/calc.git
+    ```
 
-## Note on PATH Configuration
+    If you haven't set up SSH, check out this easy [step-by-step guide](https://mantejjosan.github.io/tutorials/CollaborateOnGithub/SetUpSshKey).
 
-To use the calculator from any directory, ensure that the directory containing `calc` is in your PATH:
+2. Run the installation script:
+    ```bash
+    bash install-calc.sh
+    ```
 
-- **Linux/Mac:** Add the following line to your shell configuration file (e.g., `~/.bashrc`, `~/.zshrc`):
+3. Done! You can now use the calculator:
+    ```bash
+    calc 34+35
+    ```
 
-  ```bash
-  export PATH="$PATH:/path/to/project"
-  ```
+## Contribute
 
-  Then, source the file:
-
-  ```bash
-  source ~/.bashrc  # Or ~/.zshrc
-  ```
-
-- **Windows:**
-
-  1. Open the Environment Variables settings.
-  2. Add the full path to the directory containing `calc` to the `Path` variable.
-  3. Open a new terminal to apply the changes.
+Feel free to do so ;)
 
 ## Future Improvements
 
 - Add support for parentheses for more complex expressions.
 - Improve error handling and user feedback.
 - Extend support for additional mathematical functions (e.g., trigonometry, logarithms).
-
-## Acknowledgments
-
-Special thanks to Ray Lischner's *Exploring C++* for the inspiration to dive deeper into the C++ standard and take on this project.
-
+ 

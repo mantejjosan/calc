@@ -5,6 +5,9 @@
 # Prerequisites
 *.d
 
+# Ignore executable files without extensions
+*$
+
 # Compiled Object files
 *.slo
 *.lo
