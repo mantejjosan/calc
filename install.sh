@@ -2,6 +2,9 @@
 
 INSTALL_DIR=${1:-$HOME/.local/bin}  # Default to $HOME/.local/bin if no directory is passed
 
+# Ensure the install directory exists
+mkdir -p "$INSTALL_DIR"
+
 # Clone the repository if not already present
 REPO_URL="https://github.com/mantejjosan/calc.git"
 CURRENT_DIR=$(pwd)
@@ -27,26 +30,15 @@ make
 
 # Install binary
 echo "Installing binary to $INSTALL_DIR..."
-mkdir -p "$INSTALL_DIR"
 cp calc "$INSTALL_DIR"
+chmod +x "$INSTALL_DIR/calc"
 
 # Add to PATH if not already included
-if ! grep -q "$INSTALL_DIR" "$HOME/.bashrc"; then
-    echo "Adding $INSTALL_DIR to PATH in .bashrc"
-    echo "export PATH=\$PATH:$INSTALL_DIR" >> "$HOME/.bashrc"
-    source "$HOME/.bashrc"
-fi
-
-if ! grep -q "$INSTALL_DIR" "$HOME/.zshrc"; then
-    echo "Adding $INSTALL_DIR to PATH in .zshrc"
-    echo "export PATH=\$PATH:$INSTALL_DIR" >> "$HOME/.zshrc"
-    source "$HOME/.zshrc"
-fi
-
-if ! grep -q "$INSTALL_DIR" "$HOME/.config/fish/config.fish"; then
-    echo "Adding $INSTALL_DIR to PATH in config.fish"
-    echo "set -Ux PATH \$PATH $INSTALL_DIR" >> "$HOME/.config/fish/config.fish"
-    echo "For Fish shell, changes will take effect after restarting the terminal."
+SHELL_RC="$HOME/.${SHELL##*/}rc"
+if ! grep -q "$INSTALL_DIR" "$SHELL_RC"; then
+    echo "Adding $INSTALL_DIR to PATH in $SHELL_RC"
+    echo "export PATH=\$PATH:$INSTALL_DIR" >> "$SHELL_RC"
+    source "$SHELL_RC"
 fi
 
 echo "Installation complete! You can now run 'calc' from anywhere."
