@@ -1,0 +1,8 @@
+output_format:
+  hex: true
+  decimal: true
+output_prompt: false
+precision: 5
+enable_gpu: false
+tasks:
+  pi_digits: 100

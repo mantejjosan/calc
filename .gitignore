@@ -49,3 +49,23 @@
 *.wsf
 
 # End of https://www.toptal.com/developers/gitignore/api/c++,executable
+
+# Ignore build directory
+build/
+
+# Ignore CMake cache and temporary files
+CMakeFiles/
+CMakeCache.txt
+*.cmake
+cmake_install.cmake
+
+# Ignore compiled binaries
+*.o
+*.out
+*.a
+*.so
+*.dll
+*.exe
+
+# Ignore logs
+*.log
