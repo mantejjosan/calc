@@ -2,19 +2,33 @@
 
 INSTALL_DIR=${1:-$HOME/.local/bin}  # Default to $HOME/.local/bin if no directory is passed
 
-# Create the build directory
+# Clone the repository if not already present
+REPO_URL="https://github.com/mantejjosan/calc.git"
 CURRENT_DIR=$(pwd)
-BUILD_DIR="$CURRENT_DIR/build"
+PROJECT_DIR="$CURRENT_DIR/calc"
+
+if [[ ! -d "$PROJECT_DIR" ]]; then
+    echo "Cloning repository from $REPO_URL..."
+    git clone "$REPO_URL" "$PROJECT_DIR"
+else
+    echo "Repository already exists at $PROJECT_DIR. Pulling latest changes..."
+    cd "$PROJECT_DIR" && git pull
+fi
+
+# Create the build directory
+BUILD_DIR="$PROJECT_DIR/build"
 mkdir -p "$BUILD_DIR"
 cd "$BUILD_DIR"
 
 # Run CMake and make to build the project
+echo "Building the project..."
 cmake ..
 make
 
 # Install binary
+echo "Installing binary to $INSTALL_DIR..."
+mkdir -p "$INSTALL_DIR"
 cp calc "$INSTALL_DIR"
-echo "Installed calc to $INSTALL_DIR"
 
 # Add to PATH if not already included
 if ! grep -q "$INSTALL_DIR" "$HOME/.bashrc"; then
