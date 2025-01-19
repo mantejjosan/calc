@@ -1,4 +1,5 @@
 #include <iostream>
+#include <filesystem>
 #include <iomanip>
 #include <yaml-cpp/yaml.h>
 #include <map>
@@ -11,6 +12,7 @@
 #include <limits>       // For numeric_limits
 
 using namespace std;
+namespace fs = std::filesystem;
 
 map<string, int> precedence = {
     {"^", 3},
@@ -252,12 +254,34 @@ void printResult(long double result) {
     cout.precision(original_precision);
 }
 
+string findConfigFile(const string& filename) {
+    fs::path currentPath = fs::current_path();
+    fs::path configPath = currentPath / filename;
+    
+    // First try current directory
+    if (fs::exists(configPath)) {
+        return configPath.string();
+    }
+    
+    // Try going up directories until we find the config file or hit root
+    while (currentPath.has_parent_path()) {
+        currentPath = currentPath.parent_path();
+        configPath = currentPath / filename;
+        
+        if (fs::exists(configPath)) {
+            return configPath.string();
+        }
+    }
+    
+    throw runtime_error("Could not find " + filename + " in project directory tree");
+}
+
 int main(int argc, char** argv) {
     string expression;
     vector<string> config;
 
     // Parse command-line arguments
-    for (int i = 1; i < argc; i++) {
+    for(int i = 1; i < argc; i++) {
         string param = argv[i];
         if (param[0] == '-') {
             config.push_back(param); // Filter out all options
@@ -266,11 +290,14 @@ int main(int argc, char** argv) {
         }
     }
 
-    // Load configuration from YAML file
+    // Load configuration from YAML file with root directory search
     YAML::Node yamlConfig;
     try {
-        yamlConfig = YAML::LoadFile("config.yaml");
-    } catch (const YAML::Exception& e) {
+        string configPath = findConfigFile("config.yaml");
+        yamlConfig = YAML::LoadFile(configPath);
+        // Optional: Print which config file we're using
+        // cout << "Using config file: " << configPath << endl;
+    } catch (const exception& e) {
         cerr << "Failed to load config.yaml: " << e.what() << endl;
         return 1;
     }
