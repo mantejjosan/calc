@@ -2,6 +2,8 @@
 
 # Calc
 
+In Near Future:
+
 **Calc** is a **blazing-fast**, **GPU-accelerated**, **insanely precise**, **latex-supporting**, **scientific calculator** that runs in the **terminal**. Made in **C++**, calc uses *multithreading* and *asynchronous* techniques to provide answer even before you hit the enter button!
 
 > Checkout how **Calc-API** was used to **train AI models** to hit fascinating benchmarks in math problems here
