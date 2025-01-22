@@ -1,33 +1,36 @@
 
-# CLI Calculator 🧮
+
+# Calc
+
+**Calc** is a **blazing-fast**, **GPU-accelerated**, **insanely precise**, **latex-supporting**, **scientific calculator** that runs in the **terminal**. Made in **C++**, calc uses *multithreading* and *asynchronous* techniques to provide answer even before you hit the enter button!
+
+> Checkout how **Calc-API** was used to **train AI models** to hit fascinating benchmarks in math problems here
 
 ![calc being used in zsh terminal as demo](images/demo.gif)
 
+Whether you're a Linux enthusiast, a scientist, or an AI researcher, Calc delivers **unparalleled speed, precision, and versatility** straight to your terminal.  
+
+### **Key Features that Set Calc Apart:**  
+- **Interactive Mode:** Save sessions, reuse variables, and pick up where you left off—all within an intuitive terminal experience.  
+- **Unmatched Speed & Precision:** Solve calculations with **up to one googol decimal places of accuracy**, perfect for high-stakes scenarios where every digit counts.  
+- **GPU Acceleration:** Tackle heavy computations like matrix operations, integrations, and differentiations effortlessly using GPU power.  
+- **Advanced Algebra:** Solve systems of linear equations, handle matrix operations, and perform algebraic calculations with ease.  
+
+- **File-Based Problem Solving:** Process multiple problems from a text file and output solutions to another file or directly to the terminal.  
+- **Latex Support:** Effortlessly handle complex mathematical expressions, making Calc a favorite among students and researchers.  
+
+
 A command-line calculator built in C++ that handles basic arithmetic operations through terminal arguments. Inspired by a deep dive into C++'s command-line argument handling (`argc` and `argv`), this project demonstrates how to create practical CLI tools while exploring core language concepts. 🚀
-
-## Usage 
-
-1. **Calculate expressions**:
-   ```bash
-   calc 34+35
-   ```
-
-2. **Run Tests (Optional)** 🔧
-   Some tests are written in `test_cases.txt`. To run them, go into the build directory and run `ctest`:
-   ```bash
-   cd build
-   ctest
-   ```
 
 ## Installation ⚙️
 
-### Download for Linux/Termux 🐧 or MacOS 🍎
+### Linux 🐧 or MacOS 🍎
 
 ```bash
 curl -sSL https://raw.githubusercontent.com/mantejjosan/calc/refs/heads/main/install.sh | bash -s /usr/local/bin
 ```
 
-### Windows 🖥️
+### Windows 🖥️ or Termux
 
 1. **Install a C++ Compiler**:  
    Ensure you have a C++ compiler installed on your system, such as:
@@ -78,7 +81,11 @@ curl -sSL https://raw.githubusercontent.com/mantejjosan/calc/refs/heads/main/ins
 
 2. Explore and contribute! 🚀
 
-## The Story Behind: An Exciting Discovery 📚
+
+
+<details>
+
+<summary><h3>The Story Behind: An Exciting Discovery 📚</h3></summary>
 
 During my exploration of C++ programming through Ray Lischner's *Exploring C++*, I encountered an intriguing statement that sparked my curiosity:
 
@@ -132,4 +139,7 @@ Also, if your program works by using multiple files, say all `.txt` files in one
 ```
 
 The `*` is called a **wildcard** in Linux. 🐾
+
+</details>
+
 

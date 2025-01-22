@@ -9,10 +9,16 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
-# Add executable for the main program
-add_executable(calc calc.cpp)
+# Add source files
+set(SOURCES
+    calc.cpp
+    flaghandler.cpp
+)
 
-# Variables for YAML-CPP
+# Create executable
+add_executable(calc ${SOURCES})
+
+# YAML-CPP Configuration
 set(YAML_CPP_VERSION "0.7.0")
 set(YAML_CPP_URL "https://github.com/jbeder/yaml-cpp/archive/refs/tags/yaml-cpp-${YAML_CPP_VERSION}.tar.gz")
 set(YAML_CPP_SRC_DIR "${CMAKE_BINARY_DIR}/yaml-cpp")
@@ -20,11 +26,11 @@ set(YAML_CPP_LIB_DIR "${YAML_CPP_SRC_DIR}/build")
 set(YAML_CPP_LIB_FILE "${YAML_CPP_LIB_DIR}/libyaml-cpp.a")
 
 # Check if YAML-CPP exists; if not, download and build
-if(NOT EXISTS ${YAML_CPP_LIB_FILE})
+if(NOT EXISTS "${YAML_CPP_LIB_FILE}")
     message(STATUS "YAML-CPP not found. Downloading and building...")
-    
+
     # Download YAML-CPP
-    file(DOWNLOAD ${YAML_CPP_URL} ${CMAKE_BINARY_DIR}/yaml-cpp.tar.gz 
+    file(DOWNLOAD "${YAML_CPP_URL}" "${CMAKE_BINARY_DIR}/yaml-cpp.tar.gz"
          SHOW_PROGRESS
          STATUS DOWNLOAD_STATUS
          TLS_VERIFY ON)
@@ -36,19 +42,21 @@ if(NOT EXISTS ${YAML_CPP_LIB_FILE})
     
     # Extract YAML-CPP archive
     execute_process(
-        COMMAND ${CMAKE_COMMAND} -E tar xzf yaml-cpp.tar.gz
-        WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+        COMMAND ${CMAKE_COMMAND} -E tar xzf "${CMAKE_BINARY_DIR}/yaml-cpp.tar.gz"
+        WORKING_DIRECTORY "${CMAKE_BINARY_DIR}"
         RESULT_VARIABLE EXTRACT_RESULT
     )
     if(NOT EXTRACT_RESULT EQUAL 0)
         message(FATAL_ERROR "Failed to extract YAML-CPP")
     endif()
     
-    file(RENAME ${CMAKE_BINARY_DIR}/yaml-cpp-yaml-cpp-${YAML_CPP_VERSION} ${YAML_CPP_SRC_DIR})
-    
+    # Rename extracted directory
+    file(GLOB EXTRACTED_DIR "${CMAKE_BINARY_DIR}/yaml-cpp-*")
+    file(RENAME "${EXTRACTED_DIR}" "${YAML_CPP_SRC_DIR}")
+
     # Build YAML-CPP
     execute_process(
-        COMMAND ${CMAKE_COMMAND} -S ${YAML_CPP_SRC_DIR} -B ${YAML_CPP_LIB_DIR}
+        COMMAND ${CMAKE_COMMAND} -S "${YAML_CPP_SRC_DIR}" -B "${YAML_CPP_LIB_DIR}"
             -DCMAKE_POSITION_INDEPENDENT_CODE=ON
             -DYAML_CPP_BUILD_TESTS=OFF
             -DYAML_CPP_BUILD_TOOLS=OFF
@@ -59,7 +67,7 @@ if(NOT EXISTS ${YAML_CPP_LIB_FILE})
     endif()
     
     execute_process(
-        COMMAND ${CMAKE_COMMAND} --build ${YAML_CPP_LIB_DIR}
+        COMMAND ${CMAKE_COMMAND} --build "${YAML_CPP_LIB_DIR}"
         RESULT_VARIABLE BUILD_RESULT
     )
     if(NOT BUILD_RESULT EQUAL 0)
@@ -67,21 +75,26 @@ if(NOT EXISTS ${YAML_CPP_LIB_FILE})
     endif()
 endif()
 
+# Add header file directory
+target_include_directories(calc PRIVATE "${CMAKE_SOURCE_DIR}")
+
 # Include and link YAML-CPP
-target_include_directories(calc PRIVATE ${YAML_CPP_SRC_DIR}/include)
-target_link_libraries(calc PRIVATE ${YAML_CPP_LIB_FILE})
+target_include_directories(calc PRIVATE "${YAML_CPP_SRC_DIR}/include")
+target_link_libraries(calc PRIVATE "${YAML_CPP_LIB_FILE}")
 
 # Enable testing
 enable_testing()
 
 # Check if test_cases.txt exists
-if(NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/test_cases.txt")
+set(TEST_CASES_FILE "${CMAKE_CURRENT_SOURCE_DIR}/test_cases.txt")
+if(NOT EXISTS "${TEST_CASES_FILE}")
     message(FATAL_ERROR "test_cases.txt not found")
 endif()
 
 # Read test cases from file
-file(READ ${CMAKE_CURRENT_SOURCE_DIR}/test_cases.txt TEST_CASES_CONTENTS)
-string(REPLACE "\n" ";" TEST_CASES_LIST ${TEST_CASES_CONTENTS})
+file(READ "${TEST_CASES_FILE}" TEST_CASES_CONTENTS)
+string(STRIP "${TEST_CASES_CONTENTS}" TEST_CASES_CONTENTS) # Remove trailing newlines
+string(REPLACE "\n" ";" TEST_CASES_LIST "${TEST_CASES_CONTENTS}")
 
 # Loop through each test case and add as a test
 foreach(TEST_CASE ${TEST_CASES_LIST})
@@ -96,12 +109,13 @@ foreach(TEST_CASE ${TEST_CASES_LIST})
         string(REPLACE ")" "close" TEST_NAME ${TEST_NAME})
         
         # Add the test
-        add_test(NAME Test_${TEST_NAME}
-                 COMMAND $<TARGET_FILE:calc> ${TEST_CASE}
-                 WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
-        set_tests_properties(Test_${TEST_NAME} 
+        add_test(NAME "Test_${TEST_NAME}"
+                 COMMAND $<TARGET_FILE:calc> "${TEST_CASE}"
+                 WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}")
+        set_tests_properties("Test_${TEST_NAME}" 
             PROPERTIES 
             PASS_REGULAR_EXPRESSION "Result:"
             TIMEOUT 30)
     endif()
 endforeach()
+

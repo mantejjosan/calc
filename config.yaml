@@ -1,8 +1,9 @@
+# setup gpu 
 output_format:
-  hex: true
+  hex: false
   decimal: true
 output_prompt: false
-precision: 5
+precision: 500
 enable_gpu: false
 tasks:
   pi_digits: 100
