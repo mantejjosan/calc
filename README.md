@@ -12,6 +12,16 @@ In Near Future:
 
 Whether you're a Linux enthusiast, a scientist, or an AI researcher, Calc delivers **unparalleled speed, precision, and versatility** straight to your terminal.  
 
+### **Usage**
+
+| **Flag**        | **Description**                                  | **Default Value/Behavior** |
+|------------------|--------------------------------------------------|-----------------------------|
+| `-h`, `--hex`   | Enables hexadecimal mode.                       | `false`                    |
+| `-d`, `--decimal` | Enables decimal mode.                          | `false`                    |
+| `-nm`, `--no-message` | Disables the display of messages.             | `true`                     |
+| `-p<number>`    | Sets the preciseness to the specified number. If invalid or not provided, defaults to `6`. | `6`                        |
+
+
 ### **Key Features that Set Calc Apart:**  
 - **Interactive Mode:** Save sessions, reuse variables, and pick up where you left off—all within an intuitive terminal experience.  
 - **Unmatched Speed & Precision:** Solve calculations with **up to one googol decimal places of accuracy**, perfect for high-stakes scenarios where every digit counts.  

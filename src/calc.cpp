@@ -9,8 +9,8 @@
 #include <cmath>        // For fabs, powl
 #include <iomanip>      // For setprecision, setw
 #include <stdexcept>    // For runtime_error, invalid_argument
-#include <limits>       // For numeric_limits
-#include "filehandler.hpp"
+#include <limits>      // For numeric_limits
+#include "../include/flaghandler.hpp"
 
 using namespace std;
 namespace fs = std::filesystem;
@@ -202,12 +202,6 @@ long double evaluatePostfix(queue<string> rpn) {
   return values.top();
 }
 
-
-#include <iostream>
-#include <string>
-#include <vector>
-#include <queue>
-
 int main(int argc, char** argv) {
     std::string expression;
     std::vector<std::string> flags;
@@ -232,10 +226,10 @@ int main(int argc, char** argv) {
         std::vector<std::string> tokens = tokenize(expression);
         std::queue<std::string> postfix = getPostfix(tokens);
         long double result = evaluatePostfix(postfix);
-        handler.print(result);
+        handler.print(expression, result);   //prints and saves to history
     } catch (const std::exception& e) {
         std::cerr << "Error: " << e.what() << std::endl;
-        handler.logError(e.what());
+        //handler.logError(e.what());
     }
 
     return 0;

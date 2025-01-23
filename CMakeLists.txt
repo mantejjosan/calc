@@ -11,12 +11,15 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 
 # Add source files
 set(SOURCES
-    calc.cpp
-    flaghandler.cpp
+    src/flaghandler.cpp
+    src/calc.cpp
 )
 
 # Create executable
 add_executable(calc ${SOURCES})
+
+# Add header file directory
+target_include_directories(calc PRIVATE "${CMAKE_SOURCE_DIR}/include")
 
 # YAML-CPP Configuration
 set(YAML_CPP_VERSION "0.7.0")
@@ -74,9 +77,6 @@ if(NOT EXISTS "${YAML_CPP_LIB_FILE}")
         message(FATAL_ERROR "Failed to build YAML-CPP")
     endif()
 endif()
-
-# Add header file directory
-target_include_directories(calc PRIVATE "${CMAKE_SOURCE_DIR}")
 
 # Include and link YAML-CPP
 target_include_directories(calc PRIVATE "${YAML_CPP_SRC_DIR}/include")
